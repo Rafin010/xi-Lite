@@ -511,6 +511,17 @@
         }
 
         .col-player, .col-channels { display: flex; flex-direction: column; }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 16px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        /* Responsive Breakpoints */
         @media (min-width: 1024px) {
             .bottom-nav { display: none; }
             .lg-grid-layout { 
@@ -519,9 +530,60 @@
             }
             .view-toggle { display: flex !important; }
         }
+
         @media (max-width: 1023px) {
             body { padding-bottom: 72px; }
             .view-toggle { display: none; }
+            #channels-container, #logos-container {
+                max-height: none !important;
+                overflow-y: visible !important;
+                padding-right: 0 !important;
+                padding-bottom: 0 !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-blur { padding: 10px 12px !important; }
+            .logo-main { font-size: 22px; }
+            .logo-lite { font-size: 10px; padding: 2px 5px; margin-left: 5px; }
+            .live-badge { font-size: 8px; padding: 2px 6px; }
+            .live-badge .live-dot { width: 4px; height: 4px; }
+            
+            .main-container { padding: 12px 12px !important; gap: 14px !important; }
+            
+            .info-bar { padding: 12px 14px !important; gap: 12px !important; }
+            .info-bar > div:first-child { gap: 10px !important; }
+            .channel-logo-wrap { width: 54px !important; height: 54px !important; border-radius: 10px !important; padding: 4px !important; }
+            #current-title { font-size: 13px !important; }
+            #current-category { font-size: 10px !important; }
+            
+            .ch-card { padding: 8px 12px; gap: 12px; border-radius: 10px; }
+            .ch-logo-wrap { width: 56px; height: 36px; border-radius: 6px; padding: 2px; }
+            .ch-name { font-size: 12.5px; }
+            .ch-meta { font-size: 9px; }
+            
+            #logos-container { grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)) !important; gap: 8px !important; }
+            .logo-card { padding: 6px; border-radius: 8px; }
+            
+            .watermark img { width: 28px; height: 28px; }
+            .watermark-main { font-size: 10px; }
+            .watermark-sub { font-size: 6.5px; }
+            .watermark { padding: 4px 8px 4px 6px; top: 10px; right: 10px; border-radius: 7px; }
+            
+            #custom-controls { padding: 30px 10px 10px; }
+            .ctrl-btn { width: 30px; height: 30px; font-size: 13px; }
+            .ctrl-btn.play-main { width: 34px; height: 34px; font-size: 14px; }
+            .vol-wrap { display: none; } /* Hide volume on small screens, hardware buttons are preferred */
+            .quality-btn { height: 26px; font-size: 9px; padding: 4px 8px; }
+            .time-disp { font-size: 10px; }
+            .sidebar-header { margin-bottom: 8px; }
+            .count-badge { font-size: 9px; padding: 2px 8px; }
+        }
+
+        @media (max-width: 380px) {
+            #logos-container { grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)) !important; }
+            .ctrl-row { gap: 2px; }
+            .ch-card { padding: 8px 10px; gap: 10px; }
         }
     </style>
 </head>
@@ -549,7 +611,7 @@
         </button>
     </header>
 
-    <main style="max-width:1400px;margin:0 auto;padding:20px 16px;display:grid;grid-template-columns:1fr;gap:20px;" class="lg-grid-layout">
+    <main class="lg-grid-layout main-container">
 
         <!-- Player Area -->
         <div class="col-player" style="gap:14px;">
