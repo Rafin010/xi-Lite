@@ -384,6 +384,7 @@
             grid-template-columns: 1fr;
             gap: 12px;
             flex: 1;
+            min-height: 0;
             overflow-y: auto;
             padding-right: 6px;
             padding-bottom: 24px;
@@ -393,6 +394,7 @@
             grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
             gap: 10px;
             flex: 1;
+            min-height: 0;
             overflow-y: auto;
             padding-right: 4px;
             padding-bottom: 12px;
@@ -542,8 +544,9 @@
             .bottom-nav { display: none; }
             .lg-grid-layout { 
                 grid-template-columns: 1fr 340px !important; 
-                align-items: start;
+                align-items: stretch;
             }
+            .col-player { align-self: start; }
             .view-toggle { display: flex !important; }
         }
 
