@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="no-referrer">
-    <title>SportyXi Lite</title>
+    <meta name="description" content="SportyXi Lite — Watch live sports channels including cricket, football, FIFA, WWE, ESPN and more. Free HD sports streaming.">
+    <meta property="og:title" content="SportyXi Lite — Live Sports Streaming">
+    <meta property="og:description" content="Watch live sports channels in HD. Cricket, Football, ESPN, WWE and more.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="sportyxi_APK_logo.png">
+    <title>SportyXi Lite — Live Sports Streaming</title>
     <link rel="icon" type="image/png" href="sportyxi_APK_logo.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
@@ -15,7 +18,6 @@
     <style>
         :root {
             --bg-base: #080a0f;
-            --bg-surface: #0e1117;
             --bg-card: #111520;
             --bg-hover: #171d2e;
             --accent: #6366f1;
@@ -28,17 +30,31 @@
             --text-muted: #475569;
             --border: rgba(255,255,255,0.06);
             --border-accent: rgba(99,102,241,0.4);
+            --placeholder-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%231a1f2b'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23475569' font-family='sans-serif' font-size='24'%3ETV%3C/text%3E%3C/svg%3E");
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-base); color: var(--text-primary); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
 
+        /* Tailwind utility replacements */
+        .sticky { position: sticky; }
+        .top-0 { top: 0; }
+        .z-50 { z-index: 50; }
+        .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .text-sm { font-size: 0.875rem; }
+        .hidden { display: none; }
+        @media (min-width: 1024px) {
+            .lg\:flex { display: flex; }
+            .lg\:hidden { display: none; }
+        }
+
         ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #1e2540; border-radius: 4px; }
-
-        .bebas { font-family: 'Bebas Neue', cursive; }
-        .rajdhani { font-family: 'Rajdhani', sans-serif; }
 
         .header-blur {
             background: rgba(8, 10, 15, 0.9);
@@ -525,7 +541,7 @@
         }
 
         .col-player { display: flex; flex-direction: column; gap: 14px; }
-        .col-channels { display: flex; flex-direction: column; overflow: hidden; }
+        .col-channels { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
         
         .main-container {
             max-width: 1400px;
@@ -536,17 +552,20 @@
             gap: 20px;
             flex: 1;
             min-height: 0;
+            overflow: hidden;
             width: 100%;
         }
 
         /* Responsive Breakpoints */
         @media (min-width: 1024px) {
-            .bottom-nav { display: none; }
+            .bottom-nav { display: none !important; }
             .lg-grid-layout { 
                 grid-template-columns: 1fr 340px !important; 
+                grid-template-rows: 1fr;
                 align-items: stretch;
             }
-            .col-player { align-self: start; }
+            .col-player { overflow-y: auto; }
+            .col-channels { max-height: 100%; }
             .view-toggle { display: flex !important; }
         }
 
@@ -554,9 +573,8 @@
             .main-container { display: flex; flex-direction: column; padding: 12px !important; gap: 12px !important; }
             .col-player { flex-shrink: 0; }
             .col-channels { flex: 1; min-height: 0; }
-            .view-toggle { display: none; }
+            .view-toggle { display: none !important; }
             #channels-container, #logos-container {
-                max-height: none !important;
                 padding-bottom: 80px !important;
             }
         }
@@ -608,9 +626,9 @@
 </head>
 <body>
 
-    <header class="header-blur sticky top-0 z-50 px-5 py-3 flex items-center justify-between">
+    <header class="header-blur sticky top-0 z-50 px-5 py-3 flex items-center justify-between" role="banner">
         <div style="display:flex;align-items:center;gap:12px;">
-            <img src="sportyxi_APK_logo.png" alt="SportyXi" style="width:32px;height:32px;object-fit:contain;border-radius:8px;" onerror="this.src='https://via.placeholder.com/32'">
+            <img src="sportyxi_APK_logo.png" alt="SportyXi Logo" width="32" height="32" style="width:32px;height:32px;object-fit:contain;border-radius:8px;" onerror="this.style.display='none'">
             <div>
                 <div class="logo-text">
                     <span class="logo-main">SportyXi</span>
@@ -622,7 +640,7 @@
                 </div>
             </div>
         </div>
-        <button onclick="fetchM3UPlaylist()" title="Refresh channels"
+        <button onclick="fetchM3UPlaylist()" title="Refresh channels" aria-label="Refresh channels"
             style="width:38px;height:38px;background:var(--bg-card);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;color:var(--text-muted);"
             onmouseover="this.style.borderColor='rgba(99,102,241,0.5)';this.style.color='#818cf8'"
             onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">
@@ -657,19 +675,19 @@
                     </div>
 
                     <div class="ctrl-row">
-                        <button class="ctrl-btn play-main" id="play-btn" onclick="togglePlay()">
+                        <button class="ctrl-btn play-main" id="play-btn" onclick="togglePlay()" aria-label="Play or Pause">
                             <i class="fa-solid fa-play" id="play-icon"></i>
                         </button>
 
-                        <button class="ctrl-btn" onclick="skipTime(-10)" title="Rewind 10s">
+                        <button class="ctrl-btn" onclick="skipTime(-10)" title="Rewind 10s" aria-label="Rewind 10 seconds">
                             <i class="fa-solid fa-rotate-left" style="font-size:12px;"></i>
                         </button>
-                        <button class="ctrl-btn" onclick="skipTime(10)" title="Forward 10s">
+                        <button class="ctrl-btn" onclick="skipTime(10)" title="Forward 10s" aria-label="Forward 10 seconds">
                             <i class="fa-solid fa-rotate-right" style="font-size:12px;"></i>
                         </button>
 
                         <div class="vol-wrap">
-                            <button class="ctrl-btn" id="mute-btn" onclick="toggleMute()">
+                            <button class="ctrl-btn" id="mute-btn" onclick="toggleMute()" aria-label="Toggle Mute">
                                 <i class="fa-solid fa-volume-high" id="vol-icon"></i>
                             </button>
                             <div class="vol-slider">
@@ -691,26 +709,15 @@
                                 <div class="quality-opt active" id="qopt-auto" onclick="setQuality(-1)">
                                     Auto <span class="badge">Recommended</span>
                                 </div>
-                                <div class="quality-opt" id="qopt-1080" onclick="setQuality(0)">
-                                    1080p <span class="badge">Full HD</span>
-                                </div>
-                                <div class="quality-opt" id="qopt-720" onclick="setQuality(1)">
-                                    720p <span class="badge">HD</span>
-                                </div>
-                                <div class="quality-opt" id="qopt-480" onclick="setQuality(2)">
-                                    480p <span class="badge">SD</span>
-                                </div>
-                                <div class="quality-opt" id="qopt-360" onclick="setQuality(3)">
-                                    360p <span class="badge">Low</span>
-                                </div>
+                                <!-- Quality levels populated dynamically from HLS manifest -->
                             </div>
                         </div>
 
-                        <button class="ctrl-btn" onclick="togglePiP()" title="Picture in Picture">
+                        <button class="ctrl-btn" onclick="togglePiP()" title="Picture in Picture" aria-label="Picture in Picture">
                             <i class="fa-solid fa-up-right-from-square" style="font-size:12px;"></i>
                         </button>
 
-                        <button class="ctrl-btn" onclick="toggleFullscreen()" title="Fullscreen">
+                        <button class="ctrl-btn" onclick="toggleFullscreen()" title="Fullscreen" aria-label="Toggle Fullscreen">
                             <i class="fa-solid fa-expand" id="fs-icon"></i>
                         </button>
                     </div>
@@ -725,7 +732,7 @@
             <div class="info-bar" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
                 <div style="display:flex;align-items:center;gap:14px;min-width:0;">
                     <div class="channel-logo-wrap">
-                        <img id="current-logo" src="https://via.placeholder.com/80/1a1f2b/475569?text=?"
+                        <img id="current-logo" width="80" height="80" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%231a1f2b'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23475569' font-family='sans-serif' font-size='20'%3E?%3C/text%3E%3C/svg%3E"
                             style="max-width:100%;max-height:100%;object-fit:contain;" alt="">
                     </div>
                     <div style="min-width:0;">
@@ -798,12 +805,12 @@
         </div>
     </main>
 
-    <nav class="bottom-nav lg:hidden">
-        <button onclick="switchPage('home')" id="nav-home" class="nav-btn active">
+    <nav class="bottom-nav lg:hidden" role="navigation" aria-label="View toggle">
+        <button onclick="switchPage('home')" id="nav-home" class="nav-btn active" aria-label="List view">
             <i class="fa-solid fa-table-list"></i>
             <span>List</span>
         </button>
-        <button onclick="switchPage('logos')" id="nav-logos" class="nav-btn inactive">
+        <button onclick="switchPage('logos')" id="nav-logos" class="nav-btn inactive" aria-label="Grid view">
             <i class="fa-solid fa-grip"></i>
             <span>Grid</span>
         </button>
@@ -834,11 +841,16 @@
             playerWrap.classList.remove('controls-visible');
         });
         playerWrap.addEventListener('touchstart', () => {
-            playerWrap.classList.toggle('controls-visible');
+            playerWrap.classList.add('controls-visible');
+            clearTimeout(controlsTimeout);
+            controlsTimeout = setTimeout(() => playerWrap.classList.remove('controls-visible'), 4000);
         });
 
         // ── Keyboard Shortcuts ──
         document.addEventListener('keydown', (e) => {
+            // Don't intercept keys when typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+
             // Prevent default behavior for space and arrows so the page doesn't scroll
             if(["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
                 e.preventDefault();
@@ -942,15 +954,52 @@
                 document.getElementById('quality-dropdown').classList.remove('open');
             }
         });
+
+        function populateQualityLevels(hls) {
+            const dropdown = document.getElementById('quality-dropdown');
+            // Keep header and auto option
+            const header = dropdown.querySelector('div:first-child');
+            const autoOpt = document.getElementById('qopt-auto');
+            dropdown.innerHTML = '';
+            dropdown.appendChild(header);
+            if (autoOpt) { dropdown.appendChild(autoOpt); }
+            else {
+                const auto = document.createElement('div');
+                auto.className = 'quality-opt active';
+                auto.id = 'qopt-auto';
+                auto.onclick = () => setQuality(-1);
+                auto.innerHTML = 'Auto <span class="badge">Recommended</span>';
+                dropdown.appendChild(auto);
+            }
+            // Add real levels from manifest
+            hls.levels.forEach((level, idx) => {
+                const h = level.height;
+                const opt = document.createElement('div');
+                opt.className = 'quality-opt';
+                opt.id = `qopt-${h}`;
+                opt.onclick = () => setQuality(idx);
+                let badge = 'Low';
+                if (h >= 1080) badge = 'Full HD';
+                else if (h >= 720) badge = 'HD';
+                else if (h >= 480) badge = 'SD';
+                opt.innerHTML = `${h}p <span class="badge">${badge}</span>`;
+                dropdown.appendChild(opt);
+            });
+        }
+
         function setQuality(level) {
             if (!hlsInstance) return;
             hlsInstance.currentLevel = level;
             document.querySelectorAll('.quality-opt').forEach(o => o.classList.remove('active'));
-            const labels = {'-1':'auto','0':'1080','1':'720','2':'480','3':'360'};
-            const el = document.getElementById('qopt-' + (labels[level] || 'auto'));
-            if (el) el.classList.add('active');
-            const names = {'-1':'AUTO','0':'1080p','1':'720p','2':'480p','3':'360p'};
-            document.getElementById('quality-btn').innerHTML = `<i class="fa-solid fa-signal" style="margin-right:5px;font-size:9px;"></i>${names[level]||'AUTO'}`;
+            if (level === -1) {
+                document.getElementById('qopt-auto')?.classList.add('active');
+                document.getElementById('quality-btn').innerHTML = `<i class="fa-solid fa-signal" style="margin-right:5px;font-size:9px;"></i>AUTO`;
+            } else {
+                const h = hlsInstance.levels[level]?.height || '?';
+                const el = document.getElementById('qopt-' + h);
+                if (el) el.classList.add('active');
+                document.getElementById('quality-btn').innerHTML = `<i class="fa-solid fa-signal" style="margin-right:5px;font-size:9px;"></i>${h}p`;
+            }
             document.getElementById('quality-dropdown').classList.remove('open');
         }
 
@@ -982,7 +1031,7 @@
             document.getElementById('channel-count').innerText = 'Loading…';
             try {
                 const res = await fetch(m3uUrl);
-                if (!res.ok) throw new Error();
+                if (!res.ok) throw new Error(`HTTP ${res.status}: Failed to fetch channel list from ${m3uUrl}`);
                 const data = await res.text();
                 allChannels = parseM3U(data);
                 sportsChannels = allChannels;
@@ -994,6 +1043,7 @@
                     playChannel(sportsChannels[0].url, sportsChannels[0].name, sportsChannels[0].logo, 0);
                 }
             } catch (e) {
+                console.error('M3U fetch error:', e);
                 document.getElementById('channels-container').innerHTML = `
                     <div class="error-state">
                         <i class="fa-solid fa-circle-exclamation" style="font-size:28px;color:#f87171;display:block;margin-bottom:10px;"></i>
@@ -1057,7 +1107,7 @@
                 if (line.startsWith('#EXTINF:')) {
                     cur = {};
                     const logo = line.match(/tvg-logo="([^"]+)"/);
-                    cur.logo = logo ? logo[1] : 'https://via.placeholder.com/120/1a1f2b/475569?text=TV';
+                    cur.logo = logo ? logo[1] : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80'%3E%3Crect width='120' height='80' fill='%231a1f2b'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23475569' font-family='sans-serif' font-size='16'%3ETV%3C/text%3E%3C/svg%3E";
                     const group = line.match(/group-title="([^"]+)"/);
                     cur.category = group ? group[1].trim() : 'Other';
                     const comma = line.lastIndexOf(',');
@@ -1087,6 +1137,15 @@
             return channels;
         }
 
+        const FALLBACK_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 120 80'%3E%3Crect width='120' height='80' fill='%231a1f2b'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23475569' font-family='sans-serif' font-size='16'%3ETV%3C/text%3E%3C/svg%3E";
+        const FALLBACK_IMG_SM = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%231a1f2b'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' fill='%23475569' font-family='sans-serif' font-size='16'%3ETV%3C/text%3E%3C/svg%3E";
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
         function renderChannels() {
             const container = document.getElementById('channels-container');
             container.innerHTML = '';
@@ -1098,18 +1157,40 @@
                 const card = document.createElement('div');
                 card.className = `ch-card ${activeCard === 'ch-'+idx ? 'active' : ''}`;
                 card.id = `ch-${idx}`;
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `Play ${ch.name}`);
                 card.onclick = () => { playChannel(ch.url, ch.name, ch.logo, idx); switchPage('home'); };
-                card.innerHTML = `
-                    <div class="ch-logo-wrap">
-                        <img src="${ch.logo}" alt=""
-                            onerror="this.onerror=null;this.src='https://via.placeholder.com/120/1a1f2b/475569?text=TV'">
-                    </div>
-                    <div class="ch-info">
-                        <span class="ch-name" title="${ch.name}">${ch.name}</span>
-                        <span class="ch-meta">${ch.category}</span>
-                    </div>
-                    <i class="fa-solid fa-play watch-icon"></i>
-                `;
+                card.onkeydown = (e) => { if (e.key === 'Enter') card.click(); };
+
+                const logoWrap = document.createElement('div');
+                logoWrap.className = 'ch-logo-wrap';
+                const img = document.createElement('img');
+                img.src = ch.logo;
+                img.alt = ch.name;
+                img.width = 64;
+                img.height = 42;
+                img.onerror = function(){ this.onerror=null; this.src=FALLBACK_IMG; };
+                logoWrap.appendChild(img);
+
+                const info = document.createElement('div');
+                info.className = 'ch-info';
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'ch-name';
+                nameSpan.title = ch.name;
+                nameSpan.textContent = ch.name;
+                const metaSpan = document.createElement('span');
+                metaSpan.className = 'ch-meta';
+                metaSpan.textContent = ch.category;
+                info.appendChild(nameSpan);
+                info.appendChild(metaSpan);
+
+                const icon = document.createElement('i');
+                icon.className = 'fa-solid fa-play watch-icon';
+
+                card.appendChild(logoWrap);
+                card.appendChild(info);
+                card.appendChild(icon);
                 container.appendChild(card);
             });
         }
@@ -1121,17 +1202,32 @@
                 const card = document.createElement('div');
                 card.className = 'logo-card';
                 card.id = `grid-ch-${idx}`;
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `Play ${ch.name}`);
                 card.onclick = () => { playChannel(ch.url, ch.name, ch.logo, idx); switchPage('home'); };
-                card.innerHTML = `
-                    <img src="${ch.logo}" alt="${ch.name}" title="${ch.name}"
-                        style="width:100%;height:100%;object-fit:contain;"
-                        onerror="this.onerror=null;this.src='https://via.placeholder.com/80/1a1f2b/475569?text=TV'">
-                    <div class="grid-play-overlay">
-                        <i class="fa-solid fa-circle-play" style="font-size:28px;"></i>
-                    </div>`;
+                card.onkeydown = (e) => { if (e.key === 'Enter') card.click(); };
+
+                const img = document.createElement('img');
+                img.src = ch.logo;
+                img.alt = ch.name;
+                img.title = ch.name;
+                img.width = 80;
+                img.height = 80;
+                img.style.cssText = 'width:100%;height:100%;object-fit:contain;';
+                img.onerror = function(){ this.onerror=null; this.src=FALLBACK_IMG_SM; };
+
+                const overlay = document.createElement('div');
+                overlay.className = 'grid-play-overlay';
+                overlay.innerHTML = '<i class="fa-solid fa-circle-play" style="font-size:28px;"></i>';
+
+                card.appendChild(img);
+                card.appendChild(overlay);
                 container.appendChild(card);
             });
         }
+
+        let loadTimeout = null;
 
         function playChannel(url, name, logo, idx) {
             if (activeCard) {
@@ -1143,11 +1239,15 @@
             document.getElementById(`grid-${activeCard}`)?.classList.add('active');
 
             loader.classList.add('show');
-            document.getElementById('current-title').innerText = name;
-            document.getElementById('current-logo').src = logo || 'https://via.placeholder.com/80/1a1f2b/475569?text=?';
-            document.getElementById('current-logo').onerror = function(){ this.onerror=null; this.src='https://via.placeholder.com/80/1a1f2b/475569?text=?'; };
+            document.getElementById('current-title').textContent = name;
+            const logoEl = document.getElementById('current-logo');
+            logoEl.src = logo || FALLBACK_IMG_SM;
+            logoEl.onerror = function(){ this.onerror=null; this.src=FALLBACK_IMG_SM; };
 
-            if (window.innerWidth < 1024) window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Scroll player into view on mobile
+            if (window.innerWidth < 1024) {
+                playerWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
 
             // Reset quality menu
             document.querySelectorAll('.quality-opt').forEach(o => o.classList.remove('active'));
@@ -1155,6 +1255,15 @@
             document.getElementById('quality-btn').innerHTML = `<i class="fa-solid fa-signal" style="margin-right:5px;font-size:9px;"></i>AUTO`;
 
             if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+            if (loadTimeout) { clearTimeout(loadTimeout); loadTimeout = null; }
+
+            // Loading timeout — show retry after 15s
+            loadTimeout = setTimeout(() => {
+                loader.classList.remove('show');
+                loader.classList.add('show');
+                document.querySelector('#player-loader p').textContent = 'Stream taking too long. Tap to retry.';
+                loader.onclick = () => { loader.onclick = null; playChannel(url, name, logo, idx); };
+            }, 15000);
 
             if (Hls.isSupported()) {
                 const hls = new Hls({ 
@@ -1166,16 +1275,40 @@
                 hls.loadSource(url);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    clearTimeout(loadTimeout);
+                    document.querySelector('#player-loader p').textContent = 'Connecting to stream…';
                     video.play().catch(() => {});
                     loader.classList.remove('show');
+                    populateQualityLevels(hls);
                 });
                 hls.on(Hls.Events.ERROR, (e, data) => {
-                    if (data.fatal) loader.classList.remove('show');
+                    if (data.fatal) {
+                        clearTimeout(loadTimeout);
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                console.warn('HLS network error, attempting recovery...');
+                                hls.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                console.warn('HLS media error, attempting recovery...');
+                                hls.recoverMediaError();
+                                break;
+                            default:
+                                console.error('HLS fatal error, cannot recover:', data);
+                                loader.classList.remove('show');
+                                break;
+                        }
+                    }
                 });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = url;
-                video.onloadedmetadata = () => { video.play().catch(() => {}); loader.classList.remove('show'); };
+                video.onloadedmetadata = () => {
+                    clearTimeout(loadTimeout);
+                    video.play().catch(() => {});
+                    loader.classList.remove('show');
+                };
             } else {
+                clearTimeout(loadTimeout);
                 loader.classList.remove('show');
             }
         }
