@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
     <title>SportyXi Lite</title>
     <link rel="icon" type="image/png" href="sportyxi_APK_logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -1056,7 +1057,18 @@
                     cur.name = comma !== -1 ? line.substring(comma + 1).trim() : 'Unknown';
                     
                     // Filter: Only keep sports channels
-                    if (!cur.category.toLowerCase().includes('sport')) {
+                    const catLower = cur.category.toLowerCase();
+                    const nameLower = cur.name.toLowerCase();
+                    const isSport = catLower.includes('sport') || 
+                                    nameLower.includes('sport') || 
+                                    nameLower.includes('espn') || 
+                                    nameLower.includes('bein') || 
+                                    nameLower.includes('dazn') || 
+                                    nameLower.includes('cricket') || 
+                                    nameLower.includes('football') ||
+                                    nameLower.includes('fifa') ||
+                                    nameLower.includes('wwe');
+                    if (!isSport) {
                         cur = null;
                     }
                 } else if (line.startsWith('http') && cur) {
@@ -1140,11 +1152,7 @@
             if (Hls.isSupported()) {
                 const hls = new Hls({ 
                     enableWorker: true, 
-                    capLevelToPlayerSize: true,
-                    lowLatencyMode: true,
-                    liveSyncDurationCount: 2,
-                    liveMaxLatencyDurationCount: 4,
-                    maxLiveSyncPlaybackRate: 1.2
+                    capLevelToPlayerSize: true
                 });
                 hlsInstance = hls;
                 window._hls = hls;
