@@ -1061,7 +1061,21 @@
                     const comma = line.lastIndexOf(',');
                     cur.name = comma !== -1 ? line.substring(comma + 1).trim() : 'Unknown';
                     
-                    // Removed filter to add all channels as requested
+                    // Filter: Only keep sports channels
+                    const catLower = cur.category.toLowerCase();
+                    const nameLower = cur.name.toLowerCase();
+                    const isSport = catLower.includes('sport') || 
+                                    nameLower.includes('sport') || 
+                                    nameLower.includes('espn') || 
+                                    nameLower.includes('bein') || 
+                                    nameLower.includes('dazn') || 
+                                    nameLower.includes('cricket') || 
+                                    nameLower.includes('football') ||
+                                    nameLower.includes('fifa') ||
+                                    nameLower.includes('wwe');
+                    if (!isSport) {
+                        cur = null;
+                    }
                 } else if (line.startsWith('http') && cur) {
                     cur.url = line;
                     channels.push(cur);
