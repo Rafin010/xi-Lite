@@ -383,7 +383,7 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 12px;
-            max-height: calc(100vh - 180px);
+            flex: 1;
             overflow-y: auto;
             padding-right: 6px;
             padding-bottom: 24px;
@@ -392,7 +392,7 @@
             display: none;
             grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
             gap: 10px;
-            max-height: 68vh;
+            flex: 1;
             overflow-y: auto;
             padding-right: 4px;
             padding-bottom: 12px;
@@ -522,7 +522,8 @@
             border-radius: 14px;
         }
 
-        .col-player, .col-channels { display: flex; flex-direction: column; }
+        .col-player { display: flex; flex-direction: column; gap: 14px; }
+        .col-channels { display: flex; flex-direction: column; overflow: hidden; }
         
         .main-container {
             max-width: 1400px;
@@ -531,10 +532,13 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 20px;
+            height: calc(100vh - 70px);
+            overflow: hidden;
         }
 
         /* Responsive Breakpoints */
         @media (min-width: 1024px) {
+            body { overflow: hidden; height: 100vh; }
             .bottom-nav { display: none; }
             .lg-grid-layout { 
                 grid-template-columns: 1fr 340px !important; 
@@ -544,13 +548,14 @@
         }
 
         @media (max-width: 1023px) {
-            body { padding-bottom: 72px; }
+            body { overflow: hidden; height: 100vh; }
+            .main-container { display: flex; flex-direction: column; height: calc(100vh - 56px); padding: 12px !important; gap: 12px !important; }
+            .col-player { flex-shrink: 0; }
+            .col-channels { flex: 1; min-height: 0; }
             .view-toggle { display: none; }
             #channels-container, #logos-container {
                 max-height: none !important;
-                overflow-y: visible !important;
-                padding-right: 0 !important;
-                padding-bottom: 0 !important;
+                padding-bottom: 80px !important;
             }
         }
 
@@ -1056,21 +1061,7 @@
                     const comma = line.lastIndexOf(',');
                     cur.name = comma !== -1 ? line.substring(comma + 1).trim() : 'Unknown';
                     
-                    // Filter: Only keep sports channels
-                    const catLower = cur.category.toLowerCase();
-                    const nameLower = cur.name.toLowerCase();
-                    const isSport = catLower.includes('sport') || 
-                                    nameLower.includes('sport') || 
-                                    nameLower.includes('espn') || 
-                                    nameLower.includes('bein') || 
-                                    nameLower.includes('dazn') || 
-                                    nameLower.includes('cricket') || 
-                                    nameLower.includes('football') ||
-                                    nameLower.includes('fifa') ||
-                                    nameLower.includes('wwe');
-                    if (!isSport) {
-                        cur = null;
-                    }
+                    // Removed filter to add all channels as requested
                 } else if (line.startsWith('http') && cur) {
                     cur.url = line;
                     channels.push(cur);
